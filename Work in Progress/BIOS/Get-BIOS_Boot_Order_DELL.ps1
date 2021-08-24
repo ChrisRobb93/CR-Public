@@ -1,0 +1,1 @@
+Get-ChildItem -Path DellSmbios:\BootSequence | Select-Object -expand CurrentValue
