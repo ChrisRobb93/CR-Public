@@ -1,2 +1,2 @@
-# CR-Public
-Public repository
+# Chris Robb Public Script Repo
+This repository is public
