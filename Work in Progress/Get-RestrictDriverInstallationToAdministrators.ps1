@@ -1,3 +1,4 @@
+$DomainName = "ENTERDOMAINNAMEHERE"
 function Test-RegistryValue 
     {
 
@@ -36,7 +37,7 @@ If ( (Test-RegistryValue -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Pri
                 $ServerList = (Get-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PointAndPrint' -Name ServerList).ServerList                
                 $PPaPServerList = (Get-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Printers\PackagePointAndPrint' -Name PackagePointAndPrintServerList).PackagePointAndPrintServerList
 
-                If (( $TrustedServers -eq "1" ) -and ( $ServerList -like "*.uk.gdst*" ) -and ( $PPaPServerList -like "*")) 
+                If (( $TrustedServers -eq "1" ) -and ( $ServerList -like "*$($DomainName)*" ) -and ( $PPaPServerList -like "*")) 
                     {
                         #Write-Host "Appropriate mitigations are in place, allow Administrative override."
                         Return $True
