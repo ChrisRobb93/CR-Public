@@ -8,7 +8,7 @@ Param
 		[string] $DaysToKeep,
 
 		[Parameter(Mandatory=$True)]
-		[string] $LogDirectories,
+		[string] $LogDirectories
 )
 
 
