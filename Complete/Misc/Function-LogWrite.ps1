@@ -1,25 +1,37 @@
-Function Write-Log {
+function Write-log {
+
     [CmdletBinding()]
     Param(
-    [Parameter(Mandatory=$False)]
-    [ValidateSet("INFO","WARN","ERROR","FATAL","DEBUG")]
-    [String]
-    $Level = "INFO",
+          [parameter(Mandatory=$true)]
+          [String]$Path,
 
-    [Parameter(Mandatory=$True)]
-    [string]
-    $Message,
+          [parameter(Mandatory=$true)]
+          [String]$Message,
 
-    [Parameter(Mandatory=$False)]
-    [string]
-    $Writelogfile
+          [parameter(Mandatory=$true)]
+          [String]$Component,
+
+          [Parameter(Mandatory=$true)]
+          [ValidateSet("Info", "Warning", "Error")]
+          [String]$Type
     )
 
-    $Stamp = (Get-Date).toString("dd/MM/yy HH:mm:ss")
-    $Line = "$Stamp $Level $Message"
+    switch ($Type) {
+        "Info" { [int]$Type = 1 }
+        "Warning" { [int]$Type = 2 }
+        "Error" { [int]$Type = 3 }
+    }
 
-    If($WriteLogFile)
-        {
-            Add-Content $LogFile -Value $Line
-        }
+    # Create a log entry
+    $Content = "<![LOG[$Message]LOG]!>" +`
+        "<time=`"$(Get-Date -Format "HH:mm:ss.ffffff")`" " +`
+        "date=`"$(Get-Date -Format "M-d-yyyy")`" " +`
+        "component=`"$Component`" " +`
+        "context=`"$([System.Security.Principal.WindowsIdentity]::GetCurrent().Name)`" " +`
+        "type=`"$Type`" " +`
+        "thread=`"$([Threading.Thread]::CurrentThread.ManagedThreadId)`" " +`
+        "file=`"`">"
+
+    # Write the line to the log file
+    Add-Content -Path $Path -Value $Content
 }
