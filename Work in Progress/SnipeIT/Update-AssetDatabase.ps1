@@ -23,7 +23,7 @@
 .OUTPUTS
 	None at present. Looking to add logging in future.
 .NOTES
-	Version:        1.0
+	Version:        1.1
 	Author:         Chris Robb
 	Creation Date:  14-Feb-2024
 	Purpose/Change: Initial script development
@@ -40,11 +40,13 @@ $clientName = "contoso"
 $address = "10 Downing Street, London"
 #>
 
+<# These fields are optional should you want to deploy the config on the local client
 $xml = Import-Clixml "$PSScriptRoot\client_config.xml"
 $APIKey = $xml.APIKey
 $URL = $xml.URL
 $clientName = $xml.clientName
 $clientAddress = $xml.address
+#>
 
 ## Install & Import required modules
 If(Get-Module -ListAvailable SnipeITPS)
@@ -115,10 +117,12 @@ $deviceDetails = [psobject]@{
 
         }
 
+<# If you have SnipeIT Custom Fields they can be added here. #>
 $custom_fieldset = [psobject] @{
     _snipeit_cpu_4 = (Get-WmiObject -Class Win32_Processor).Name
     _snipeit_ram_5 = "$((Get-WMIObject -Class Win32_PhysicalMemory | Measure-Object -Property capacity -Sum).sum /1gb)GB"
     _snipeit_storage_7 = "$(ForEach($Disk in Get-Disk){$Disk.Model + " | " + [Int]$($Disk.Size /1GB) + 'GB'})"
+    _snipeit_firmware_8 = (Get-WmiObject -Class Win32_Bios).SMBIOSBIOSVersion
 }
 
 ## Check Database for IDs
@@ -147,6 +151,7 @@ $onlineCategory  = (Get-SnipeitCategory -search $deviceDetails.category).Id
                 CPU            = $onlineAsset.custom_fields.CPU.value;
                 RAM            = $onlineAsset.custom_fields.RAM.Value;
                 Storage        = $onlineAsset.custom_fields.Storage.value;
+                Firmware       = $onlineAsset.custom_fields.Firmware.value;
                 }
 
             $objRef2 = @{
@@ -159,6 +164,7 @@ $onlineCategory  = (Get-SnipeitCategory -search $deviceDetails.category).Id
                 RAM            = $custom_fieldset._snipeit_ram_5;
                 CPU            = $custom_fieldset._snipeit_cpu_4;
                 Storage        = $custom_fieldset._snipeit_storage_7;
+                Firmware       = $custom_fieldset._snipeit_firmware_8;
                 }            
 
                 $compare = Compare-Object $objRef1.Values $objRef2.Values
