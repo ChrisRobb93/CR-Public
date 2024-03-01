@@ -114,15 +114,16 @@ $deviceDetails = [psobject]@{
     'manufacturer'    = (Get-WmiObject -Class Win32_ComputerSystem).Manufacturer
     'company_id'      = $clientName
     'location_id'     = $clientAddress
-
         }
 
 <# If you have SnipeIT Custom Fields they can be added here. #>
 $custom_fieldset = [psobject] @{
-    _snipeit_cpu_4 = (Get-WmiObject -Class Win32_Processor).Name
-    _snipeit_ram_5 = "$((Get-WMIObject -Class Win32_PhysicalMemory | Measure-Object -Property capacity -Sum).sum /1gb)GB"
-    _snipeit_storage_7 = "$(ForEach($Disk in Get-Disk){$Disk.Model + " | " + [Int]$($Disk.Size /1GB) + 'GB'})"
-    _snipeit_firmware_8 = (Get-WmiObject -Class Win32_Bios).SMBIOSBIOSVersion
+    _snipeit_cpu_4              = (Get-WmiObject -Class Win32_Processor).Name
+    _snipeit_ram_5              = "$((Get-WMIObject -Class Win32_PhysicalMemory | Measure-Object -Property capacity -Sum).sum /1gb)GB"
+    _snipeit_storage_7          = "$(ForEach($Disk in Get-Disk){$Disk.Model + " | " + [Int]$($Disk.Size /1GB) + 'GB'})"
+    _snipeit_firmware_8         = (Get-WmiObject -Class Win32_Bios).SMBIOSBIOSVersion
+    _snipeit_operating_system_9 = (Get-Item "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion").GetValue('ProductName')
+    _snipeit_build_version_10   = (Get-WmiObject -Class Win32_OperatingSystem).Version
 }
 
 ## Check Database for IDs
@@ -152,6 +153,8 @@ $onlineCategory  = (Get-SnipeitCategory -search $deviceDetails.category).Id
                 RAM            = $onlineAsset.custom_fields.RAM.Value;
                 Storage        = $onlineAsset.custom_fields.Storage.value;
                 Firmware       = $onlineAsset.custom_fields.Firmware.value;
+                OS             = $onlineAsset.custom_fields.'Operating System'.value;
+                buildVersion   = $onlineAsset.custom_fields.'Build Version'.value;
                 }
 
             $objRef2 = @{
@@ -165,6 +168,8 @@ $onlineCategory  = (Get-SnipeitCategory -search $deviceDetails.category).Id
                 CPU            = $custom_fieldset._snipeit_cpu_4;
                 Storage        = $custom_fieldset._snipeit_storage_7;
                 Firmware       = $custom_fieldset._snipeit_firmware_8;
+                OS             = $custom_fieldset._snipeit_operating_system_9;
+                buildVersion   = $custom_fieldset._snipeit_build_version_10;
                 }            
 
                 $compare = Compare-Object $objRef1.Values $objRef2.Values
