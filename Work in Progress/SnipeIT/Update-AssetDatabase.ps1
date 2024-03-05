@@ -67,7 +67,7 @@ Try {
     Connect-SnipeitPS -URL $URL -apiKey $APIKey
 
 ## Chassis Type to Category Map
-$chassis = Get-WmiObject win32_systemenclosure | select chassistypes  
+$chassis = Get-WmiObject win32_systemenclosure | Select-Object chassistypes  
     if($chassis.chassistypes -contains '3'){$chassistype ="Desktop"}
     elseif($chassis.chassistypes -contains '4'){$chassistype ="Desktop"}
     elseif($chassis.chassistypes -contains '5'){$chassistype ="Pizza Box"}
