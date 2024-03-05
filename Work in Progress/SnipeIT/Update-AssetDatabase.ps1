@@ -67,42 +67,20 @@ Try {
     Connect-SnipeitPS -URL $URL -apiKey $APIKey
 
 ## Chassis Type to Category Map
-$chassis = Get-WmiObject win32_systemenclosure | Select-Object chassistypes  
-    if($chassis.chassistypes -contains '3'){$chassistype ="Desktop"}
-    elseif($chassis.chassistypes -contains '4'){$chassistype ="Desktop"}
-    elseif($chassis.chassistypes -contains '5'){$chassistype ="Pizza Box"}
-    elseif($chassis.chassistypes -contains '6'){$chassistype ="Desktop"}
-    elseif($chassis.chassistypes -contains '7'){$chassistype ="Desktop"}
-    elseif($chassis.chassistypes -contains '8'){$chassistype ="Portable"}
-    elseif($chassis.chassistypes -contains '9'){$chassistype ="Laptop"}
-    elseif($chassis.chassistypes -contains '10'){$chassistype ="Laptop"}
-    elseif($chassis.chassistypes -contains '11'){$chassistype ="Hand Held"}
-    elseif($chassis.chassistypes -contains '12'){$chassistype ="Docking Station"}
-    elseif($chassis.chassistypes -contains '13'){$chassistype ="Desktop"}
-    elseif($chassis.chassistypes -contains '14'){$chassistype ="Laptop"}
-    elseif($chassis.chassistypes -contains '15'){$chassistype ="Space-Saving"}
-    elseif($chassis.chassistypes -contains '16'){$chassistype ="Lunch Box"}
-    elseif($chassis.chassistypes -contains '17'){$chassistype ="Desktop"}
-    elseif($chassis.chassistypes -contains '18'){$chassistype ="Expansion Chassis"}
-    elseif($chassis.chassistypes -contains '19'){$chassistype ="SubChassis"}
-    elseif($chassis.chassistypes -contains '20'){$chassistype ="Bus Expansion Chassis"}
-    elseif($chassis.chassistypes -contains '21'){$chassistype ="Peripheral Chassis"}
-    elseif($chassis.chassistypes -contains '22'){$chassistype ="RAID Chassis"}
-    elseif($chassis.chassistypes -contains '23'){$chassistype ="Rack Mount Chassis"}
-    elseif($chassis.chassistypes -contains '24'){$chassistype ="Desktop"}
-    elseif($chassis.chassistypes -contains '25'){$chassistype ="MuLaptopi-system chassis"}
-    elseif($chassis.chassistypes -contains '26'){$chassistype ="Compact PCI"}
-    elseif($chassis.chassistypes -contains '27'){$chassistype ="Advanced TCA"}
-    elseif($chassis.chassistypes -contains '28'){$chassistype ="Blade"}
-    elseif($chassis.chassistypes -contains '29'){$chassistype ="Blade Enclosure"}
-    elseif($chassis.chassistypes -contains '30'){$chassistype ="Tablet"}
-    elseif($chassis.chassistypes -contains '31'){$chassistype ="Laptop"}
-    elseif($chassis.chassistypes -contains '32'){$chassistype ="Laptop"}
-    elseif($chassis.chassistypes -contains '33'){$chassistype ="IoT Gateway"}
-    elseif($chassis.chassistypes -contains '34'){$chassistype ="Desktop"}
-    elseif($chassis.chassistypes -contains '35'){$chassistype ="Desktop"}
-    elseif($chassis.chassistypes -contains '36'){$chassistype ="PoS"}
-    else {$chassistype = "Unknown"}
+$enclosureType = Get-WmiObject Win32_SystemEnclosure | Select-Object ChassisTypes
+
+ If ($enclosureType.ChassisTypes[0] -eq 12 -or $enclosureType.ChassisTypes[0]-eq 21) {} #Ignore Docking Stations
+
+
+ else {
+     switch ($enclosureType.ChassisTypes[0]) {
+     {$_ -in "8", "9", "10", "11", "12", "14", "18", "21","31"} {$ChassisType = "Laptop"}
+     {$_ -in "32"} {$ChassisType = "Tablet"}
+     {$_ -in "3", "4", "5", "6", "7", "15", "16"} {$ChassisType = "Desktop"}
+     {$_ -in "23"}{$ChassisType = "Server"}
+     Default {Write-Host "Error Condition:" $_ `n`n "Full Output of Chassistype" $enclosureType.ChassisTypes }
+     }
+ }
 
 ## Gather Local client details
 $deviceDetails = [psobject]@{
