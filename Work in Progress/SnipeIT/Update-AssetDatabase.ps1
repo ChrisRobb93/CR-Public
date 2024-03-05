@@ -70,17 +70,17 @@ Try {
 $enclosureType = Get-WmiObject Win32_SystemEnclosure | Select-Object ChassisTypes
 
  If ($enclosureType.ChassisTypes[0] -eq 12 -or $enclosureType.ChassisTypes[0]-eq 21) {} #Ignore Docking Stations
-
-
+ 
  else {
      switch ($enclosureType.ChassisTypes[0]) {
      {$_ -in "8", "9", "10", "11", "12", "14", "18", "21","31"} {$ChassisType = "Laptop"}
      {$_ -in "32"} {$ChassisType = "Tablet"}
      {$_ -in "3", "4", "5", "6", "7", "15", "16"} {$ChassisType = "Desktop"}
      {$_ -in "23"}{$ChassisType = "Server"}
-     Default {Write-Host "Error Condition:" $_ `n`n "Full Output of Chassistype" $enclosureType.ChassisTypes }
+     Default {$ChassisType = "Unknown" }
      }
  }
+
 
 ## Gather Local client details
 $deviceDetails = [psobject]@{
