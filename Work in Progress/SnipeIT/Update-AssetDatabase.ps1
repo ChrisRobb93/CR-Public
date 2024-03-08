@@ -210,7 +210,7 @@ $onlineCategory  = (Get-SnipeitCategory -search $deviceDetails.category).Id
             Else
                 {
                     Write-Host "$cleanModel not found. Creating a new entry."
-                    If($chassistype -eq "Workstation"){$fieldset = "4"}
+                    If($chassistype -eq "Desktop"){$fieldset = "4"}
                     If($chassistype -eq "Laptop"){$fieldset = "5"}
                     Else{$Fieldset = $chassitype}
                     $onlineModel = New-SnipeitModel -Name $cleanModel -category_id $onlineCategory -manufacturer_id $onlineManufacturer.id -fieldset_id $fieldset -ErrorAction Stop
