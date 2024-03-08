@@ -64,14 +64,14 @@ Else
 Try {
 
 ## Connect to Asset Database
-    Connect-SnipeitPS -URL $URL -apiKey $APIKey
+Connect-SnipeitPS -URL $URL -apiKey $APIKey
 
 ## Chassis Type to Category Map
 $enclosureType = Get-WmiObject Win32_SystemEnclosure | Select-Object ChassisTypes
 
- If ($enclosureType.ChassisTypes[0] -eq 12 -or $enclosureType.ChassisTypes[0]-eq 21) {} #Ignore Docking Stations
+If ($enclosureType.ChassisTypes[0] -eq 12 -or $enclosureType.ChassisTypes[0]-eq 21) {} #Ignore Docking Stations
  
- else {
+else {
      switch ($enclosureType.ChassisTypes[0]) {
      {$_ -in "8", "9", "10", "11", "12", "14", "18", "21","31"} {$ChassisType = "Laptop"}
      {$_ -in "32"} {$ChassisType = "Tablet"}
@@ -210,9 +210,7 @@ $onlineCategory  = (Get-SnipeitCategory -search $deviceDetails.category).Id
             Else
                 {
                     Write-Host "$cleanModel not found. Creating a new entry."
-                    If($chassistype -eq "Desktop"){$fieldset = "4"}
-                    If($chassistype -eq "Laptop"){$fieldset = "5"}
-                    Else{$Fieldset = $chassitype}
+                    $fieldset = Get-SnipeitFieldset | Where-Object {$_.Name -eq $ChassisType} | Select-Object Id
                     $onlineModel = New-SnipeitModel -Name $cleanModel -category_id $onlineCategory -manufacturer_id $onlineManufacturer.id -fieldset_id $fieldset -ErrorAction Stop
                     Write-Host "MODEL $cleanModel created in Database."
                 }  
