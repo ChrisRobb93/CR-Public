@@ -94,7 +94,6 @@ $deviceDetails = [psobject]@{
     'category'        = $ChassisType
     'manufacturer'    = (Get-WmiObject -Class Win32_ComputerSystem).Manufacturer
     'company_id'      = $clientName
-    'location_id'     = $clientAddress
         }
 
 <# If you have SnipeIT Custom Fields they can be added here. #>
@@ -113,7 +112,7 @@ $cleanModel = [regex]::Replace($deviceDetails.model_id,$pattern,"")
 
 $onlineModel = (Get-SnipeItModel -Search $cleanModel)
 $onlineCompany = (Get-SnipeitCompany -name $clientName).Id
-$onlineLocation = (Get-SnipeitLocation -search $deviceDetails.location_id).Id
+$onlineLocation = (Get-SnipeitLocation -search $clientName)
 $onlineCategory  = (Get-SnipeitCategory -search $deviceDetails.category).Id
 
 
@@ -130,6 +129,7 @@ $onlineCategory  = (Get-SnipeitCategory -search $deviceDetails.category).Id
                 modelID        = $onlineasset.Model.id;
                 categoryID     = $onlineasset.category.id;
                 companyID      = $onlineAsset.company.id;
+                locationID     = $onlineAsset.rta_location.id;
                 CPU            = $onlineAsset.custom_fields.CPU.value;
                 RAM            = $onlineAsset.custom_fields.RAM.Value;
                 Storage        = $onlineAsset.custom_fields.Storage.value;
@@ -144,7 +144,8 @@ $onlineCategory  = (Get-SnipeitCategory -search $deviceDetails.category).Id
                 Notes          = $deviceDetails.notes;
                 modelID        = $onlineModel.id;
                 categoryID     = $onlineCategory;
-                companyID      = $onlineCompany;           
+                companyID      = $onlineCompany;
+                locationID     = $onlineLocation;          
                 RAM            = $custom_fieldset._snipeit_ram_5;
                 CPU            = $custom_fieldset._snipeit_cpu_4;
                 Storage        = $custom_fieldset._snipeit_storage_7;
@@ -159,7 +160,7 @@ $onlineCategory  = (Get-SnipeitCategory -search $deviceDetails.category).Id
                 If($compare -ne $null)
                     {
                         Write-Host "Changes in asset detected. Updating $URL"
-                        Set-SnipeitAsset -id $onlineAsset.id -warranty_months $deviceDetails.warranty_months -name $deviceDetails.name -model_id $onlineModel.id -serial $deviceDetails.serial -notes $deviceDetails.notes -company_id $onlineCompany -customfields $custom_fieldset
+                        Set-SnipeitAsset -id $onlineAsset.id -warranty_months $deviceDetails.warranty_months -name $deviceDetails.name -model_id $onlineModel.id -serial $deviceDetails.serial -notes $deviceDetails.notes -company_id $onlineCompany -customfields $custom_fieldset -rtd_location_id $onlineLocation.id
                     }
                 ElseIf($compare -eq $null)
                     { 
@@ -241,12 +242,12 @@ $onlineCategory  = (Get-SnipeitCategory -search $deviceDetails.category).Id
             Else
                 {
                     Write-Host "$($deviceDetails.location_id) not found. Creating a new entry."
-                    $onlineLocation = New-SnipeitLocation -name $deviceDetails.location_id -ErrorAction Stop
+                    $onlineLocation = New-SnipeitLocation -name $clientName -address $addressLine1 -address2 $addressLine2 -city $city -state $state -country $country -zip $postcode -ErrorAction Stop
                     Write-Host "LOCATION $($deviceDetails.location_id) created in Database. "
                 }
             
             Write-Host "Creating new asset $($deviceDetails.Name)"
-            New-SnipeitAsset -status_id 6 -warranty_months $deviceDetails.warranty_months -name $deviceDetails.name -model_id $onlineModel.id -serial $deviceDetails.serial -notes $deviceDetails.notes -company_id $onlineCompany -customfields $custom_fieldset -ErrorAction Stop
+            New-SnipeitAsset -status_id 6 -warranty_months $deviceDetails.warranty_months -name $deviceDetails.name -model_id $onlineModel.id -serial $deviceDetails.serial -notes $deviceDetails.notes -company_id $onlineCompany -customfields $custom_fieldset -rtd_location_id $onlineLocation -ErrorAction Stop
         }
 }
 
