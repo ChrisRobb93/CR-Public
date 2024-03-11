@@ -99,7 +99,7 @@ $deviceDetails = [psobject]@{
 
 <# If you have SnipeIT Custom Fields they can be added here. #>
 $custom_fieldset = [psobject] @{
-    _snipeit_cpu_4              = (Get-WmiObject -Class Win32_Processor).Name
+    _snipeit_cpu_4              = ((Get-WmiObject -Class Win32_Processor).Name | Select-Object -First 1)
     _snipeit_ram_5              = "$((Get-WMIObject -Class Win32_PhysicalMemory | Measure-Object -Property capacity -Sum).sum /1gb)GB"
     _snipeit_storage_7          = "$(ForEach($Disk in Get-Disk){$Disk.Model + " | " + [Int]$($Disk.Size /1GB) + 'GB'})"
     _snipeit_firmware_8         = (Get-WmiObject -Class Win32_Bios).SMBIOSBIOSVersion
