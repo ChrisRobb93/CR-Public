@@ -48,6 +48,9 @@ $clientName = $xml.clientName
 $clientAddress = $xml.address
 #>
 
+#Set TLS for older devices
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
 ## Install & Import required modules
 If(Get-Module -ListAvailable SnipeITPS)
     {
