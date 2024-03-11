@@ -88,7 +88,7 @@ else {
 ## Gather Local client details
 $deviceDetails = [psobject]@{
     'name'            = $env:COMPUTERNAME
-    'serial'          = (Get-WmiObject -Class Win32_Bios).SerialNumber
+    'serial'          = ((Get-WmiObject -Class Win32_Bios).SerialNumber).Replace(" ","")
     'model_id'        = (Get-WmiObject -Class Win32_ComputerSystem).Model
     'warranty_months' = 36
     'category'        = $ChassisType
