@@ -213,7 +213,7 @@ $onlineCategory  = (Get-SnipeitCategory -search $deviceDetails.category).Id
             Else
                 {
                     Write-Host "$cleanModel not found. Creating a new entry."
-                    $fieldset = Get-SnipeitFieldset | Where-Object {$_.Name -eq $ChassisType} | Select-Object Id
+                    $fieldset = Get-SnipeitFieldset | Where-Object {$_.Name -eq $ChassisType} | Select-Object -ExpandProperty id
                     $onlineModel = New-SnipeitModel -Name $cleanModel -category_id $onlineCategory -manufacturer_id $onlineManufacturer.id -fieldset_id $fieldset -ErrorAction Stop
                     Write-Host "MODEL $cleanModel created in Database."
                 }  
