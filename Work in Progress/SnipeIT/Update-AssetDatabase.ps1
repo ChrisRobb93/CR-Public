@@ -118,7 +118,7 @@ $onlineCategory  = (Get-SnipeitCategory -search $deviceDetails.category).Id
 
 
 ## Check if Asset Exists already
-    If($onlineAsset = Get-SnipeitAsset -serial $deviceDetails.serial)
+    If($onlineAsset = Get-SnipeitAsset -serial $deviceDetails.serial -ErrorAction Stop)
         {
             #Asset Found
             #Compare online asset to local and check for changes
