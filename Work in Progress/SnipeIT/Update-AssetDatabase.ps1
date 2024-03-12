@@ -234,16 +234,16 @@ $onlineCategory  = (Get-SnipeitCategory -search $deviceDetails.category).Id
                 }
 
             # Check Location
-            Write-Host "Looking for LOCATION $($deviceDetails.location_id) in Database..."
+            Write-Host "Looking for LOCATION $clientName in Database..."
             If($onlineLocation)
                 {
-                    Write-Host "$($deviceDetails.location_id) found in Database. No action needed."
+                    Write-Host "$clientName found in Database. No action needed."
                 }
             Else
                 {
-                    Write-Host "$($deviceDetails.location_id) not found. Creating a new entry."
+                    Write-Host "$clientName not found. Creating a new entry."
                     $onlineLocation = New-SnipeitLocation -name $clientName -address $addressLine1 -address2 $addressLine2 -city $city -state $state -country $country -zip $postcode -ErrorAction Stop
-                    Write-Host "LOCATION $($deviceDetails.location_id) created in Database. "
+                    Write-Host "LOCATION $clientName created in Database. "
                 }
             
             Write-Host "Creating new asset $($deviceDetails.Name)"
