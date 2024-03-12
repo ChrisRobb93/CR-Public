@@ -247,7 +247,7 @@ $onlineCategory  = (Get-SnipeitCategory -search $deviceDetails.category).Id
                 }
             
             Write-Host "Creating new asset $($deviceDetails.Name)"
-            New-SnipeitAsset -status_id 6 -warranty_months $deviceDetails.warranty_months -name $deviceDetails.name -model_id $onlineModel.id -serial $deviceDetails.serial -notes $deviceDetails.notes -company_id $onlineCompany -customfields $custom_fieldset -rtd_location_id $onlineLocation -ErrorAction Stop
+            New-SnipeitAsset -status_id 6 -warranty_months $deviceDetails.warranty_months -name $deviceDetails.name -model_id $onlineModel.id -serial $deviceDetails.serial -notes $deviceDetails.notes -company_id $onlineCompany -customfields $custom_fieldset -rtd_location_id $onlineLocation.id -ErrorAction Stop
         }
 }
 
