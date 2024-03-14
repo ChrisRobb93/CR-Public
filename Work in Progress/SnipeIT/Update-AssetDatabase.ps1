@@ -181,7 +181,7 @@ $onlineCategory  = (Get-SnipeitCategory -search $deviceDetails.category).Id
 
             # Check Manufacturer - COMPLETE
             Write-Host "Looking for MANUFACTURER $($deviceDetails.manufacturer) in Database..."
-            If($onlineManufacturer = Get-SnipeitManufacturer -search $deviceDetails.manufacturer)
+            If($onlineManufacturer = Get-SnipeitManufacturer -name $deviceDetails.manufacturer)
                 {
                     Write-Host "$($deviceDetails.manufacturer) found in Database. No action needed."
                 }
