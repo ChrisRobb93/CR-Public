@@ -160,7 +160,7 @@ $onlineCategory  = (Get-SnipeitCategory -search $deviceDetails.category).Id
                 If($compare -ne $null)
                     {
                         Write-Host "Changes in asset detected. Updating $URL"
-                        Set-SnipeitAsset -id $onlineAsset.id -warranty_months $deviceDetails.warranty_months -name $deviceDetails.name -model_id $onlineModel.id -serial $deviceDetails.serial -notes $deviceDetails.notes -company_id $onlineCompany -customfields $custom_fieldset -rtd_location_id $onlineLocation.id
+                        Set-SnipeitAsset -id $onlineAsset.id -name $deviceDetails.name -model_id $onlineModel.id -serial $deviceDetails.serial -company_id $onlineCompany -customfields $custom_fieldset -rtd_location_id $onlineLocation.id
                     }
                 ElseIf($compare -eq $null)
                     { 
