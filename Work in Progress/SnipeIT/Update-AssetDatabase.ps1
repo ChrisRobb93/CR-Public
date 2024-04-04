@@ -77,9 +77,9 @@ If ($enclosureType.ChassisTypes[0] -eq 12 -or $enclosureType.ChassisTypes[0]-eq 
 else {
      switch ($enclosureType.ChassisTypes[0]) {
      {$_ -in "8", "9", "10", "11", "12", "14", "18", "21","31"} {$ChassisType = "Laptop"}
-     {$_ -in "32"} {$ChassisType = "Tablet"}
-     {$_ -in "3", "4", "5", "6", "7", "15", "16"} {$ChassisType = "Desktop"}
-     {$_ -in "23"}{$ChassisType = "Server"}
+     {$_ -in "32","30"} {$ChassisType = "Tablet"}
+     {$_ -in "3", "4", "5", "6", "7", "15", "16","35"} {$ChassisType = "Desktop"}
+     {$_ -in "23","28","29"}{$ChassisType = "Server"}
      Default {$ChassisType = "Unknown" }
      }
  }
