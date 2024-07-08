@@ -199,7 +199,7 @@ $onlineCategory  = (Get-SnipeitCategory -search $deviceDetails.category).Id
             Else
                 {
                     Write-Host "$($deviceDetails.category) not found. Creating a new entry."
-                    $onlineModel = New-SnipeitCategory -name $deviceDetails.category -category_type asset -ErrorAction Stop
+                    $onlineCategory = New-SnipeitCategory -name $deviceDetails.category -category_type asset -ErrorAction Stop
                     Write-Host "CATEGORY $($deviceDetails.category) created in Database. "
                 }
 
