@@ -23,10 +23,13 @@
 .OUTPUTS
 	None at present. Looking to add logging in future.
 .NOTES
-	Version:        1.1
+	Version:        1.2
 	Author:         Chris Robb
 	Creation Date:  14-Feb-2024
+    Update Date: 16-SEPT-24
 	Purpose/Change: Initial script development
+
+    1.2 - Removed the step to set serial number upon every update due to changes in the Serial verification of exisiting assets. (19-SEPT-24)
   
 .EXAMPLE
 	.\Update-AssetDatabase.ps1
@@ -158,7 +161,7 @@ $onlineCategory  = (Get-SnipeitCategory -search $deviceDetails.category).Id
                 If($compare -ne $null)
                     {
                         Write-Host "Changes in asset detected. Updating $URL"
-                        Set-SnipeitAsset -id $onlineAsset.id -name $deviceDetails.name -model_id $onlineModel.id -serial $deviceDetails.serial -company_id $onlineCompany -customfields $custom_fieldset -rtd_location_id $onlineLocation.id
+                        Set-SnipeitAsset -id $onlineAsset.id -name $deviceDetails.name -model_id $onlineModel.id -company_id $onlineCompany -customfields $custom_fieldset -rtd_location_id $onlineLocation.id
                     }
                 ElseIf($compare -eq $null)
                     { 
