@@ -23,13 +23,16 @@
 .OUTPUTS
 	None at present. Looking to add logging in future.
 .NOTES
-	Version:        1.2
+	Version:        1.3
 	Author:         Chris Robb
 	Creation Date:  14-Feb-2024
-    Update Date: 16-SEPT-24
+    Update Date:    09-Apr-2025
 	Purpose/Change: Initial script development
 
     1.2 - Removed the step to set serial number upon every update due to changes in the Serial verification of exisiting assets. (19-SEPT-24)
+    1.3 - Fixed process adding ComputerName. (09-APR-25)
+    1.3 - Added additional checks for Manufacturer, Category, Model, Company and Location. (09-APR-25)
+    1.3 - Added LastLoggedInUser custom fieldset. (09-APR-25)
   
 .EXAMPLE
 	.\Update-AssetDatabase.ps1

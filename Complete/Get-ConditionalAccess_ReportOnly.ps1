@@ -6,7 +6,7 @@ $SignIns = Get-MGAuditLogSignIn
             ForEach ($Policy in $Policies)
                 {
                     
-                    If (($Policy.Result -eq "reportOnlyFailure") -or ($Policy.Result -eq "reportOnlyInterrupted")){
+                    If (($Policy.Result -Like "reportOnlyFailure") -or ($Policy.Result -eq "reportOnlyInterrupted")){
                     $Report = [ordered]@{'Login Time'=$SignIn.CreatedDateTime;'Policy Name'=$Policy.DisplayName;'Username'=$SignIn.UserDisplayName;'Result'=$Policy.Result;'Device Name'=$signin.DeviceDetail.DisplayName;'OS Version'=$signin.DeviceDetail.OperatingSystem;'Browser'=$signin.DeviceDetail.Browser;'IP Address'=$SignIn.IPAddress}
                     $Reports += @(New-Object -TypeName psObject -Property $Report)
                     }
@@ -15,5 +15,5 @@ $SignIns = Get-MGAuditLogSignIn
                 }        
     }
 
-$Reports | FT
+$Reports | Format-Table
 $Reports = $NULL
